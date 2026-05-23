@@ -8,6 +8,7 @@
 ### Added
 - 聚合 API 余额检测现在会跟随账号池用量轮询周期自动刷新，刷新间隔和设置页“用量轮询线程”保持一致。
 - 新增 Codex 图片生成兼容链路：默认按官方 Codex 行为为 `/v1/responses` 自动注入 `image_generation` tool，支持显式 tool 透传，并提供 `/v1/images/generations` 与 `/v1/images/edits` 兼容入口，默认图片工具模型为 `gpt-image-2`。
+- 新增 API Key 协议级别“原样透传 (Passthrough)”模式：支持跳过 `openai_compat` 强制向 `/v1/responses` 的转换，在接入聚合 API 等第三方中转时保留原始请求的全部参数和路径。
 - Codex CLI 首次接入引导新增 `auth.json` 配置步骤，明确平台 Key、`auth.json` 与 `config.toml` 的关系。
 
 ### Fixed

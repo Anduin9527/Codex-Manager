@@ -121,6 +121,7 @@ fn executor_kind_label(value: GatewayUpstreamExecutorKind) -> &'static str {
         GatewayUpstreamExecutorKind::CodexResponses => "codex_responses",
         GatewayUpstreamExecutorKind::Claude => "claude",
         GatewayUpstreamExecutorKind::Gemini => "gemini",
+        GatewayUpstreamExecutorKind::Passthrough => "passthrough",
     }
 }
 
@@ -351,6 +352,7 @@ fn provider_upstream_hint(
         GatewayUpstreamExecutorKind::Claude => Some(("Claude", "claude")),
         GatewayUpstreamExecutorKind::Gemini => Some(("Gemini", "gemini")),
         GatewayUpstreamExecutorKind::CodexResponses => None,
+        GatewayUpstreamExecutorKind::Passthrough => None,
     }
 }
 

@@ -13,6 +13,7 @@ pub(super) enum GatewayUpstreamExecutorKind {
     CodexResponses,
     Claude,
     Gemini,
+    Passthrough,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -36,6 +37,9 @@ pub(super) fn resolve_gateway_upstream_executor_kind(
     }
     if protocol_type == crate::apikey_profile::PROTOCOL_GEMINI_NATIVE {
         return GatewayUpstreamExecutorKind::Gemini;
+    }
+    if protocol_type == crate::apikey_profile::PROTOCOL_PASSTHROUGH {
+        return GatewayUpstreamExecutorKind::Passthrough;
     }
     GatewayUpstreamExecutorKind::CodexResponses
 }
@@ -155,6 +159,13 @@ where
             has_more_candidates,
             log_gateway_result,
         ),
+        GatewayUpstreamExecutorKind::Passthrough => {
+            log::error!("event=gateway_upstream_executor_kind_unsupported executor_kind=passthrough account_id={}", account.id);
+            CandidateUpstreamDecision::RespondUpstream(super::GatewayUpstreamResponse::TerminalError {
+                status: 400,
+                message: "透传协议不支持分配到常规账号池，请使用聚合 API 轮转策略 (Passthrough protocol is not supported for account pool rotation; please use Aggregate API rotation strategy)".to_string(),
+            })
+        }
     }
 }
 

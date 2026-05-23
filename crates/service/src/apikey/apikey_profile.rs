@@ -2,6 +2,7 @@ pub(crate) const CLIENT_CODEX: &str = "codex";
 pub(crate) const PROTOCOL_OPENAI_COMPAT: &str = "openai_compat";
 pub(crate) const PROTOCOL_ANTHROPIC_NATIVE: &str = "anthropic_native";
 pub(crate) const PROTOCOL_GEMINI_NATIVE: &str = "gemini_native";
+pub(crate) const PROTOCOL_PASSTHROUGH: &str = "passthrough";
 pub(crate) const AUTH_BEARER: &str = "authorization_bearer";
 pub(crate) const AUTH_X_API_KEY: &str = "x_api_key";
 pub(crate) const ROTATION_ACCOUNT: &str = "account_rotation";
@@ -90,7 +91,11 @@ pub(crate) fn is_gemini_request_path(path: &str) -> bool {
 /// # 返回
 /// 返回函数执行结果
 pub(crate) fn resolve_gateway_protocol_type(protocol_type: &str, path: &str) -> &'static str {
-    match normalize_key(protocol_type).as_str() {
+    let normalized = normalize_key(protocol_type);
+    if normalized == PROTOCOL_PASSTHROUGH {
+        return PROTOCOL_PASSTHROUGH;
+    }
+    match normalized.as_str() {
         _ if is_gemini_request_path(path) => PROTOCOL_GEMINI_NATIVE,
         // 中文注释：平台 Key 对 Codex / Claude Code 默认按路径通配；
         // `/v1/messages*` 走 Claude 语义，Gemini 原生路径走 Gemini 语义，其余标准路径走 OpenAI/Codex 语义。
@@ -116,6 +121,7 @@ pub(crate) fn normalize_protocol_type(value: Option<String>) -> Result<String, S
             "openai" | "openai_compat" => Ok(PROTOCOL_OPENAI_COMPAT.to_string()),
             "anthropic" | "anthropic_native" => Ok(PROTOCOL_ANTHROPIC_NATIVE.to_string()),
             "gemini" | "gemini_native" => Ok(PROTOCOL_GEMINI_NATIVE.to_string()),
+            "passthrough" | "透传" => Ok(PROTOCOL_PASSTHROUGH.to_string()),
             other => Err(format!("unsupported protocol type: {other}")),
         },
         None => Ok(PROTOCOL_OPENAI_COMPAT.to_string()),

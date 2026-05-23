@@ -48,6 +48,7 @@ const PROTOCOL_LABELS: Record<string, string> = {
   openai_compat: "通配兼容 (Codex / Claude Code / Gemini CLI)",
   anthropic_native: "通配兼容 (Codex / Claude Code / Gemini CLI)",
   gemini_native: "通配兼容 (Codex / Claude Code / Gemini CLI)",
+  passthrough: "原样透传 (Passthrough)",
 };
 
 const REASONING_LABELS: Record<string, string> = {
@@ -636,6 +637,9 @@ export function ApiKeyModal({
                     <SelectGroup>
                   <SelectItem value="openai_compat">
                     {t("通配兼容 (Codex / Claude Code / Gemini CLI)")}
+                  </SelectItem>
+                  <SelectItem value="passthrough">
+                    {t("原样透传 (Passthrough)")}
                   </SelectItem>
                   </SelectGroup>
                 </SelectContent>
